@@ -1,0 +1,30 @@
+<?php
+
+global $product;
+global $post;
+ 
+$attributes = $product->get_attributes();
+ 
+if ( ! $attributes ) {
+     
+    return;
+     
+}
+ 
+foreach ( $attributes as $attribute ) {
+              
+    // Get the taxonomy.
+    $terms = wp_get_post_terms( $product->id, $attribute[ 'name' ], 'all' );
+    $taxonomy = $terms[ 0 ]->taxonomy;
+          
+    // Get the taxonomy object.
+    $taxonomy_object = get_taxonomy( $taxonomy );
+     
+    // Get the attribute label.
+    $attribute_label = $taxonomy_object->labels->singular_name;
+     
+    // Display the label followed by a clickable list of terms.
+    echo get_the_term_list( $post->ID, $attribute[ 'name' ] , '<div class="attributes">' . $attribute_label . ': ' , ', ', '</div>' );
+     
+     
+} ?>
